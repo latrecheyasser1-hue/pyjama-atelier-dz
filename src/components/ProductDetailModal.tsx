@@ -241,8 +241,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           flexDirection: 'column', 
           alignItems: 'center', 
           justifyContent: 'center', 
-          padding: '1mm 2mm', 
+          padding: '1mm 3mm 1mm 0mm',
           margin: '0 auto',
+          marginLeft: '-2mm',
           textAlign: 'center', 
           background: 'white', 
           color: 'black',
@@ -250,12 +251,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           overflow: 'hidden'
         }}>
           
-          {/* En-tête Atelier */}
+          {/* En-tête Atelier - HAMMEQHA (Super Bold, Thick, Larger) */}
           <h1 style={{ 
-            fontSize: '11px', 
+            fontSize: '15px', 
             fontWeight: '900', 
-            margin: '0 0 1px 0', 
-            letterSpacing: '0.5px', 
+            fontFamily: "'Arial Black', 'Impact', 'Arial', sans-serif",
+            margin: '0 0 2px 0', 
+            letterSpacing: '1px', 
             textTransform: 'uppercase',
             lineHeight: '1',
             color: '#000000',
@@ -264,13 +266,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             PYJAMA DZ
           </h1>
 
-          {/* Nom du Modèle */}
+          {/* Nom du Modèle - MATHAMMEQOUCH HKA (Normal weight, lighter, smaller) */}
           <h2 style={{ 
-            fontSize: '13px', 
-            fontWeight: '800', 
+            fontSize: '12px', 
+            fontWeight: '500', 
+            fontFamily: "'Arial', sans-serif",
             margin: '0 0 3px 0', 
             lineHeight: '1.1',
-            color: '#000000',
+            color: '#222222',
             maxWidth: '100%',
             overflow: 'hidden',
             textOverflow: 'ellipsis',

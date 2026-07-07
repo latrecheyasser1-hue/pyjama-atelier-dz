@@ -119,17 +119,17 @@ body {
     break-inside: avoid !important;
   }
 
-  /* 3. Rendre visible et en position FIXED (accrochée à l'écran/page 1) la zone du ticket pour qu'elle soit parfaite et unique sur 1 seule page ! */
+  /* 3. Rendre visible et en position FIXED (accrochée à l'écran/page 1) la zone du ticket ! */
   .ticket-print-area {
     visibility: visible !important;
     position: fixed !important;
-    left: 0 !important;
+    left: -2mm !important; /* Décalage de 2mm vers la gauche pour compenser la marge physique du rouleau thermique */
     top: 0 !important;
     width: 50mm !important;
     height: 28mm !important;
     max-width: 50mm !important;
     max-height: 28mm !important;
-    padding: 1mm 2mm !important;
+    padding: 1mm 3mm 1mm 0mm !important; /* Plus d'espace à droite pour pousser vers la gauche */
     margin: 0 !important;
     background: white !important;
     color: black !important;

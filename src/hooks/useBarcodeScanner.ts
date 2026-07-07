@@ -19,17 +19,17 @@ export function useBarcodeScanner(onScan: (barcode: string) => void, enabled: bo
       const elapsedTime = currentTime - lastKeyTimeRef.current;
       lastKeyTimeRef.current = currentTime;
 
-      // Si le temps écoulé depuis la dernière touche est trop long (> 100ms),
+      // Si le temps écoulé depuis la dernière touche est trop long (> 350ms pour tolérer la latence des douchettes sans fil Bluetooth/2.4G),
       // c'est probablement un humain qui tape au clavier normal, on réinitialise le buffer.
-      if (elapsedTime > 100) {
+      if (elapsedTime > 350) {
         bufferRef.current = '';
       }
 
       // Ignorer les touches de modification
       if (e.ctrlKey || e.altKey || e.metaKey) return;
 
-      // Si on appuie sur Entrée et qu'on a accumulé un code de plus de 2 caractères
-      if (e.key === 'Enter') {
+      // Si on appuie sur Entrée ou Tab et qu'on a accumulé un code de plus de 2 caractères
+      if (e.key === 'Enter' || e.key === 'Tab') {
         if (bufferRef.current.length >= 2) {
           const scannedCode = bufferRef.current;
           bufferRef.current = '';
@@ -44,6 +44,22 @@ export function useBarcodeScanner(onScan: (barcode: string) => void, enabled: bo
 
           if (!isFormInput) {
             e.preventDefault();
+            // 🔔 Jouer un bip sonore de succès type caisse enregistreuse / douchette professionnelle !
+            try {
+              const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(1500, ctx.currentTime); // Fréquence nette et claire
+              gain.gain.setValueAtTime(0.15, ctx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start();
+              osc.stop(ctx.currentTime + 0.12);
+            } catch (err) {
+              // Ignorer si l'audio n'est pas supporté ou bloqué
+            }
             onScan(scannedCode);
           }
         }

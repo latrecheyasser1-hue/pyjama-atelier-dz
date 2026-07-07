@@ -91,27 +91,38 @@ body {
  * STYLES D'IMPRESSION (TICKET & ÉTIQUETTE CODE-BARRES)
  * ---------------------------------------------------- */
 @media print {
-  /* Cacher absolument TOUT le contenu web normal et supprimer son espace dans le DOM */
+  /* Réduire tous les éléments à 0 pour qu'aucun élément ne déborde et ne crée une 2ème page */
   body * {
     visibility: hidden;
   }
   
-  /* Verrouiller la page à exactement 1 seule étiquette 50x30mm sans marges ni espaces blancs */
-  html, body {
+  /* Verrouiller la page à exactement 1 seule étiquette 50x30mm et interdire tout débordement */
+  html, body, #root, #root > * {
     width: 50mm !important;
     height: 30mm !important;
     max-width: 50mm !important;
     max-height: 30mm !important;
+    min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
     background: white !important;
   }
 
-  /* Rendre visible UNIQUEMENT la zone du ticket et la positionner en fixe sur 50x30mm */
+  /* Éviter absolument tout saut de page ou répétition sur une 2ème page */
+  * {
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Rendre visible UNIQUEMENT la zone du ticket sur la 1ère étiquette (position absolute au lieu de fixed pour ne jamais répéter sur une 2ème page !) */
   .ticket-print-area {
     visibility: visible !important;
-    position: fixed !important;
+    position: absolute !important;
     left: 0 !important;
     top: 0 !important;
     width: 50mm !important;
@@ -143,4 +154,5 @@ body {
     margin: 0mm;
   }
 }
+
 

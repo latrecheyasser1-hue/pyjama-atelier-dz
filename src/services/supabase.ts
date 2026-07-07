@@ -41,7 +41,7 @@ export async function checkBarcodeExists(barcode: string): Promise<{ exists: boo
   const { data, error } = await supabase
     .from('products')
     .select('name')
-    .eq('barcode', barcode.trim())
+    .ilike('barcode', barcode.trim())
     .maybeSingle();
 
   if (error) {
@@ -53,6 +53,26 @@ export async function checkBarcodeExists(barcode: string): Promise<{ exists: boo
     return { exists: true, productName: data.name };
   }
   return { exists: false };
+}
+
+/**
+ * Récupère un produit directement par son code-barres (recherche exacte ou insensible à la casse)
+ */
+export async function getProductByBarcode(barcode: string): Promise<Product | null> {
+  if (!barcode || barcode.trim() === '') return null;
+  
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .ilike('barcode', barcode.trim())
+    .maybeSingle();
+
+  if (error) {
+    console.error('Erreur lors de la recherche par code-barres:', error);
+    return null;
+  }
+
+  return data || null;
 }
 
 /**

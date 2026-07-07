@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Product } from './types/database.types';
-import { getProducts, addProduct, deleteProduct } from './services/supabase';
+import { getProducts, addProduct, deleteProduct, getProductByBarcode } from './services/supabase';
 import { useBarcodeScanner } from './hooks/useBarcodeScanner';
 import { Navbar } from './components/Navbar';
 import { ProductGallery } from './components/ProductGallery';
@@ -61,12 +61,29 @@ export default function App() {
   }, [searchQuery, fetchProducts]);
 
   // 2. Détection automatique du Scanner de Code-Barres en Arrière-Plan !
-  const handleBarcodeScanned = useCallback((scannedCode: string) => {
-    const code = scannedCode.trim().toUpperCase();
+  const handleBarcodeScanned = useCallback(async (scannedCode: string) => {
+    const code = scannedCode.trim();
+    if (!code) return;
     console.log("👉 [SCAN DETECTÉ] Code-barres reçu:", code);
 
-    // Chercher si le produit existe déjà dans la liste chargée
-    const foundProduct = products.find(p => p.barcode.toUpperCase() === code);
+    // 1. Chercher d'abord dans la liste chargée en mémoire (insensible à la casse et aux espaces)
+    let foundProduct = products.find(p => (p.barcode || '').trim().toLowerCase() === code.toLowerCase());
+
+    // 2. Si non trouvé en mémoire (ex: à cause d'un filtre de recherche actif ou pagination), chercher dans Supabase !
+    if (!foundProduct) {
+      try {
+        foundProduct = await getProductByBarcode(code) || undefined;
+        // Si trouvé dans la BDD, on l'ajoute/met à jour dans la liste affichée
+        if (foundProduct) {
+          setProducts(prev => {
+            const exists = prev.some(p => p.id === foundProduct!.id);
+            return exists ? prev : [foundProduct!, ...prev];
+          });
+        }
+      } catch (err) {
+        console.error("Erreur recherche barcode Supabase:", err);
+      }
+    }
 
     if (foundProduct) {
       // 🎯 PRODUIT TROUVÉ -> Ouverture instantanée de la fiche et effet sonore/visuel !
@@ -78,13 +95,13 @@ export default function App() {
       });
       showToast(`📦 Model detected: "${foundProduct.name}"`, "scan");
     } else {
-      // ⚠️ PRODUIT INCONNU -> On ouvre la modale d'ajout pour lui !
-      showToast(`⚠️ Barcode "${code}" not found. Click "Add Model" to register it.`, "error");
+      // ⚠️ PRODUIT INCONNU -> On propose d'ajouter
+      showToast(`⚠️ Barcode "${code}" not found in database. Click "Add New Model" to register it.`, "error");
     }
   }, [products]);
 
-  // Activation du hook de scanner sur toute l'application
-  useBarcodeScanner(handleBarcodeScanned, true);
+  // Activation du hook de scanner sur toute l'application (uniquement si connecté)
+  useBarcodeScanner(handleBarcodeScanned, isAuthenticated);
 
   // 3. Gestionnaires d'actions (Ajout / Suppression)
   const handleAddProduct = async (name: string, barcode: string, imageFile: File | null) => {

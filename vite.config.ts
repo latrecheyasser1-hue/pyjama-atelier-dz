@@ -11,11 +11,18 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'logo.svg'],
+      devOptions: {
+        enabled: true,
+        type: 'module',
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+      },
       manifest: {
         name: "Pyjama DZ - L'Atelier",
         short_name: "Pyjama DZ",
         description: "Application de gestion visuelle des produits et étiquettes code-barres pour l'Atelier",
-        theme_color: "#ffffff",
+        theme_color: "#be123c",
         background_color: "#ffffff",
         display: "standalone",
         start_url: "/",

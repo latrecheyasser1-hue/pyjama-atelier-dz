@@ -67,8 +67,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   useEffect(() => {
     if (product) {
       generateBarcode(barcodeRef.current, product.barcode, 2.2, 70, 16, true);
-      // Pour l'étiquette thermique 50x30mm (1.80x1.10 in) : barres nettes (height 42px) sans texte intégré pour ne pas déformer
-      generateBarcode(printBarcodeRef.current, product.barcode, 1.8, 42, 12, false);
+      // Pour l'étiquette thermique 50x30mm (1.80x1.10 in) : barres nettes (width 1.5, height 42px) sans texte intégré pour éviter la double écriture
+      generateBarcode(printBarcodeRef.current, product.barcode, 1.5, 42, 11, false);
     }
 
     setIsConfirmingDelete(false);
@@ -243,7 +243,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           textAlign: 'center', 
           background: 'white', 
           color: 'black',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          overflow: 'hidden'
         }}>
           
           {/* En-tête Atelier */}
@@ -254,7 +255,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             letterSpacing: '0.5px', 
             textTransform: 'uppercase',
             lineHeight: '1',
-            color: '#000000'
+            color: '#000000',
+            whiteSpace: 'nowrap'
           }}>
             PYJAMA DZ
           </h1>
@@ -282,9 +284,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               fontWeight: '900', 
               fontFamily: 'monospace', 
               margin: '2px 0 0 0', 
-              letterSpacing: '1.5px', 
+              letterSpacing: '1px', 
               color: '#000000',
-              lineHeight: '1'
+              lineHeight: '1',
+              whiteSpace: 'nowrap',
+              maxWidth: '100%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}>
               {product.barcode}
             </p>

@@ -77,12 +77,12 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !barcode.trim()) {
-      setErrorMsg("Veuillez remplir le nom du modèle et le code-barres.");
+      setErrorMsg("Please provide both the model name and barcode.");
       return;
     }
 
     if (barcodeExists) {
-      setErrorMsg(`Impossible d'enregistrer : ce code-barres est déjà utilisé pour "${existingProductName}".`);
+      setErrorMsg(`Cannot save: Barcode is already assigned to "${existingProductName}".`);
       return;
     }
 
@@ -93,7 +93,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
       await onAdd(name.trim(), barcode.trim(), imageFile);
       onClose();
     } catch (err: any) {
-      setErrorMsg(err.message || "Une erreur est survenue lors de l'enregistrement.");
+      setErrorMsg(err.message || "An error occurred while saving the product.");
     } finally {
       setIsSubmitting(false);
     }
@@ -111,8 +111,8 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Nouveau Modèle Atelier</h3>
-              <p className="text-xs text-slate-400">Ajouter un produit avec photo et code-barres</p>
+              <h3 className="text-lg font-bold text-white">New Atelier Model</h3>
+              <p className="text-xs text-slate-400">Register a new product with photo and barcode</p>
             </div>
           </div>
           <button
@@ -137,12 +137,12 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
           {/* 1. Nom du Produit */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-              Nom du Modèle / Pyjama *
+              Model / Pyjama Name *
             </label>
             <input
               type="text"
               required
-              placeholder="ex: Pyjama Satin Royale - Bleu Nuit (Taille L)"
+              placeholder="e.g. Royal Satin Pyjama - Navy Blue (Size L)"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
@@ -153,11 +153,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">
-                Code-Barres Unique * (Chiffres, Lettres, "-" ou "_")
+                Unique Barcode * (Numbers, Letters, "-" or "_")
               </label>
               {isCheckingBarcode && (
                 <span className="text-xs text-amber-400 flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin" /> Vérification...
+                  <Loader2 className="w-3 h-3 animate-spin" /> Checking...
                 </span>
               )}
             </div>
@@ -198,13 +198,13 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               <div className="mt-2.5 p-3.5 bg-rose-500/20 border border-rose-500/40 rounded-xl flex items-center gap-3 text-rose-300 text-xs sm:text-sm font-semibold animate-bounce">
                 <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
                 <span>
-                  ⚠️ LALA ! Hada code-barres raah déjà dayro l'produit : <strong className="text-white underline">{existingProductName}</strong> !
+                  ⚠️ Duplicate Barcode: This code is already assigned to <strong className="text-white underline">{existingProductName}</strong>!
                 </span>
               </div>
             )}
             {barcode && !barcodeExists && !isCheckingBarcode && (
               <p className="mt-1.5 text-xs text-emerald-400 flex items-center gap-1 font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Code-barres disponible et valide pour l'atelier !
+                <CheckCircle2 className="w-3.5 h-3.5" /> Barcode is unique and ready for registration!
               </p>
             )}
           </div>
@@ -212,19 +212,19 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
           {/* 3. Photo du Produit */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-              Photo du Produit (Optionnel mais recommandé)
+              Product Photo (Optional but recommended)
             </label>
 
             {imagePreview ? (
               <div className="relative rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 aspect-video flex items-center justify-center group">
-                <img src={imagePreview} alt="Aperçu" className="w-full h-full object-cover" />
+                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button
                     type="button"
                     onClick={() => { setImageFile(null); setImagePreview(null); }}
                     className="px-4 py-2 bg-rose-500 text-white rounded-xl text-xs font-bold shadow-lg hover:bg-rose-600 transition-all flex items-center gap-1.5"
                   >
-                    <X className="w-4 h-4" /> Changer la photo
+                    <X className="w-4 h-4" /> Change photo
                   </button>
                 </div>
               </div>
@@ -235,9 +235,9 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                     <Upload className="w-6 h-6" />
                   </div>
                   <p className="mb-1 text-sm text-slate-300 font-medium">
-                    <span className="text-amber-400 font-bold">Cliquez</span> ou déposez la photo ici
+                    <span className="text-amber-400 font-bold">Click</span> or drag photo here
                   </p>
-                  <p className="text-xs text-slate-500">PNG, JPG ou WEBP (Max 5 Mo)</p>
+                  <p className="text-xs text-slate-500">PNG, JPG or WEBP (Max 5 MB)</p>
                 </div>
                 <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
               </label>
@@ -252,7 +252,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               disabled={isSubmitting}
               className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-sm transition-colors disabled:opacity-50"
             >
-              Annuler
+              Cancel
             </button>
             <button
               type="submit"
@@ -262,12 +262,12 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Enregistrement...</span>
+                  <span>Saving...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Enregistrer le Modèle</span>
+                  <span>Save Model</span>
                 </>
               )}
             </button>

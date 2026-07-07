@@ -22,7 +22,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 flex flex-col items-center justify-center min-h-[60vh]">
         <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
         <p className="mt-4 text-slate-400 font-medium animate-pulse">
-          Chargement de la galerie de l'Atelier...
+          Loading Atelier Models Gallery...
         </p>
       </div>
     );
@@ -38,13 +38,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
           </div>
           <h3 className="text-2xl font-bold text-white mb-2">
             {searchQuery
-              ? `Aucun modèle trouvé pour "${searchQuery}"`
-              : "La vitrine de l'Atelier est vide"}
+              ? `No models found for "${searchQuery}"`
+              : "The Atelier showcase is empty"}
           </h3>
           <p className="text-slate-400 max-w-md mx-auto mb-8 text-sm leading-relaxed">
             {searchQuery
-              ? "Essayez de vérifier le code-barres scanné ou le nom saisi dans la barre de recherche."
-              : "Commencez par ajouter votre premier pyjama ou modèle de confection avec sa photo et son code-barres !"}
+              ? "Try verifying the scanned barcode or the name entered in the search bar."
+              : "Start by adding your first pyjama or garment model with its photo and barcode!"}
           </p>
           {!searchQuery && (
             <button
@@ -52,7 +52,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
               className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-amber-500/20 transform hover:-translate-y-1"
             >
               <Plus className="w-5 h-5 stroke-[3]" />
-              <span>Ajouter le Premier Modèle</span>
+              <span>Add First Model</span>
             </button>
           )}
         </div>
@@ -67,10 +67,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span>✨ Galerie des Modèles</span>
+            <span>✨ Models Gallery</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-            Cliquez sur une photo pour afficher la fiche détaillée ou imprimer l'étiquette code-barres
+            Click on any photo to view product details or print barcode labels
           </p>
         </div>
       </div>
@@ -82,7 +82,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
             key={product.id}
             onClick={() => onSelectProduct(product)}
             className="glass-card group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col aspect-[3/4] select-none"
-            title={`Cliquez pour ouvrir ${product.name}`}
+            title={`Click to open ${product.name}`}
           >
             {/* Photo principale du produit en plein fond */}
             <div className="absolute inset-0 w-full h-full bg-slate-800 overflow-hidden">

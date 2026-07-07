@@ -53,14 +53,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Pyjama DZ
               </h1>
               <p className="text-xs text-amber-400 font-medium tracking-widest uppercase flex items-center gap-1">
-                <QrCode className="w-3 h-3" /> L'Atelier de Confection
+                <QrCode className="w-3 h-3" /> Atelier Production System
               </p>
             </div>
           </div>
 
           {/* Badge Compteur sur Mobile/Tablet */}
           <div className="md:hidden bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-300">
-            {totalProducts} {totalProducts === 1 ? 'Modèle' : 'Modèles'}
+            {totalProducts} {totalProducts === 1 ? 'Model' : 'Models'}
           </div>
         </div>
 
@@ -71,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <input
             type="search"
-            placeholder="Rechercher par nom ou scanner un code..."
+            placeholder="Search by name or scan barcode..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="scanner-friendly w-full pl-11 pr-4 py-2.5 bg-slate-800/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all shadow-inner"
@@ -84,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Badge Compteur sur Desktop */}
           <div className="hidden md:flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-xl text-sm font-semibold text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>{totalProducts} {totalProducts === 1 ? 'Modèle' : 'Modèles'}</span>
+            <span>{totalProducts} {totalProducts === 1 ? 'Model' : 'Models'}</span>
           </div>
 
           {/* Bouton d'Installation PWA (si disponible sur le PC) */}
@@ -92,10 +92,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={handleInstallClick}
               className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg hover:shadow-amber-500/10 animate-bounce"
-              title="Installer l'application sur votre PC"
+              title="Install application on your PC"
             >
               <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Installer sur PC</span>
+              <span className="hidden sm:inline">Install PC App</span>
             </button>
           )}
 
@@ -105,7 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex-1 md:flex-initial flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transform hover:-translate-y-0.5 active:translate-y-0"
           >
             <Plus className="w-5 h-5 stroke-[3]" />
-            <span>Ajouter un Modèle</span>
+            <span>Add New Model</span>
           </button>
         </div>
 

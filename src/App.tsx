@@ -36,7 +36,7 @@ export default function App() {
       setProducts(data);
     } catch (e: any) {
       console.error("Erreur de chargement:", e);
-      showToast("Impossible de charger les modèles depuis Supabase.", "error");
+      showToast("Failed to load models from database.", "error");
     } finally {
       setIsLoading(false);
     }
@@ -65,10 +65,10 @@ export default function App() {
         spread: 70,
         origin: { y: 0.6 }
       });
-      showToast(`📦 Modèle détecté : "${foundProduct.name}" !`, "scan");
+      showToast(`📦 Model detected: "${foundProduct.name}"`, "scan");
     } else {
       // ⚠️ PRODUIT INCONNU -> On ouvre la modale d'ajout pour lui !
-      showToast(`⚠️ Code-barres scanné "${code}" introuvable. Ouvrez "Ajouter un Modèle" pour l'enregistrer.`, "error");
+      showToast(`⚠️ Barcode "${code}" not found. Click "Add Model" to register it.`, "error");
     }
   }, [products]);
 
@@ -89,13 +89,13 @@ export default function App() {
       origin: { y: 0.5 }
     });
     
-    showToast(`✨ Modèle "${newProduct.name}" ajouté avec succès à l'atelier !`, "success");
+    showToast(`✨ Model "${newProduct.name}" successfully registered!`, "success");
   };
 
   const handleDeleteProduct = async (id: string, imageUrl: string | null) => {
     await deleteProduct(id, imageUrl);
     setProducts(prev => prev.filter(p => p.id !== id));
-    showToast("🗑️ Modèle supprimé définitivement de l'atelier.", "success");
+    showToast("🗑️ Model deleted successfully.", "success");
   };
 
   return (
@@ -157,9 +157,9 @@ export default function App() {
       {/* Pied de page Atelier (Masqué au Print) */}
       <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500 print:hidden mt-auto">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p>© {new Date().getFullYear()} Pyjama DZ - L'Atelier de Confection. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} Pyjama DZ - Atelier Production System. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            <span>Conçu avec excellence & passion pour l'artisanat algérien</span>
+            <span>Crafted with excellence for Algerian textile manufacturing</span>
             <Sparkles className="w-3.5 h-3.5 text-amber-500 inline" />
           </p>
         </div>

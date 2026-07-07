@@ -86,7 +86,7 @@ export async function addProduct(name: string, barcode: string, imageFile: File 
   // 1. Vérification ultime anti-doublon avant insertion
   const { exists, productName } = await checkBarcodeExists(barcode);
   if (exists) {
-    throw new Error(`Le code-barres "${barcode}" est déjà attribué au produit "${productName}". Doublon interdit !`);
+    throw new Error(`Duplicate Barcode: "${barcode}" is already assigned to "${productName}".`);
   }
 
   // 2. Upload de l'image si fournie

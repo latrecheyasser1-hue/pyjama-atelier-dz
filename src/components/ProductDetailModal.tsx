@@ -67,7 +67,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   useEffect(() => {
     if (product) {
       generateBarcode(barcodeRef.current, product.barcode, 2.2, 70, 16, true);
-      generateBarcode(printBarcodeRef.current, product.barcode, 2.5, 75, 18, false);
+      // Pour l'étiquette thermique 50x30mm (1.80x1.10 in) : barres nettes (height 42px) sans texte intégré pour ne pas déformer
+      generateBarcode(printBarcodeRef.current, product.barcode, 1.8, 42, 12, false);
     }
 
     setIsConfirmingDelete(false);
@@ -228,25 +229,63 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       </div>
 
       {/* ----------------------------------------------------
-        * 2. ZONE SPÉCIALE D'IMPRESSION (Visible UNIQUEMENT au Print)
+        * 2. ZONE SPÉCIALE D'IMPRESSION (Visible UNIQUEMENT au Print - Format 50x30mm / 1.80x1.10 in)
         * ---------------------------------------------------- */}
-      <div className="ticket-print-area hidden print:block">
-        <div style={{ border: 'none', padding: '8px 4px', textAlign: 'center', background: 'white', color: 'black' }}>
+      <div className="ticket-print-area hidden print:flex">
+        <div style={{ 
+          width: '100%', 
+          height: '100%', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          padding: '1mm 2mm', 
+          textAlign: 'center', 
+          background: 'white', 
+          color: 'black',
+          boxSizing: 'border-box'
+        }}>
           
           {/* En-tête Atelier */}
-          <h1 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 8px 0', letterSpacing: '1px', textTransform: 'uppercase' }}>
+          <h1 style={{ 
+            fontSize: '11px', 
+            fontWeight: '900', 
+            margin: '0 0 1px 0', 
+            letterSpacing: '0.5px', 
+            textTransform: 'uppercase',
+            lineHeight: '1',
+            color: '#000000'
+          }}>
             PYJAMA DZ
           </h1>
 
           {/* Nom du Modèle */}
-          <h2 style={{ fontSize: '18px', fontWeight: '800', margin: '0 0 10px 0', lineHeight: '1.2' }}>
+          <h2 style={{ 
+            fontSize: '13px', 
+            fontWeight: '800', 
+            margin: '0 0 3px 0', 
+            lineHeight: '1.1',
+            color: '#000000',
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}>
             {product.name}
           </h2>
 
           {/* Code-barres graphique officiel + Numéro en texte clair en dessous */}
-          <div style={{ margin: '4px 0 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: '90px' }}>
-            <svg ref={printBarcodeRef} style={{ maxWidth: '260px', width: '100%', height: '75px', display: 'block', margin: '0 auto' }}></svg>
-            <p style={{ fontSize: '16px', fontWeight: '900', fontFamily: 'monospace', margin: '6px 0 0 0', letterSpacing: '3px', color: '#000000' }}>
+          <div style={{ margin: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+            <svg ref={printBarcodeRef} style={{ maxWidth: '46mm', width: '100%', height: '42px', display: 'block', margin: '0 auto' }}></svg>
+            <p style={{ 
+              fontSize: '11px', 
+              fontWeight: '900', 
+              fontFamily: 'monospace', 
+              margin: '2px 0 0 0', 
+              letterSpacing: '1.5px', 
+              color: '#000000',
+              lineHeight: '1'
+            }}>
               {product.barcode}
             </p>
           </div>

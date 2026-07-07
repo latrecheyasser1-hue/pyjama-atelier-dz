@@ -101,23 +101,26 @@ body {
     visibility: visible !important;
   }
   
-  /* Positionner le ticket proprement en haut à gauche de la page/étiquette */
+  /* Positionner le ticket proprement au centre de l'étiquette thermique (ex: 50x30mm / 1.80x1.10 in) */
   .ticket-print-area {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    max-width: 80mm; /* Largeur standard ticket ou étiquette thermique */
-    padding: 4mm;
+    height: 100%;
+    padding: 0;
     margin: 0;
     background: white !important;
     color: black !important;
     box-shadow: none !important;
     border: none !important;
-    text-align: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
   }
 
-  /* Configuration de la page d'impression pour éviter les en-têtes et pieds de page par défaut */
+  /* Configuration de la page d'impression pour s'adapter au format autocollant sélectionné */
   @page {
     size: auto;
     margin: 0mm;

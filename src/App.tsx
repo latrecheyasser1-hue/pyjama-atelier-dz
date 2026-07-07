@@ -8,7 +8,7 @@ import { AddProductModal } from './components/AddProductModal';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { LoginPage } from './components/LoginPage';
 import confetti from 'canvas-confetti';
-import { QrCode, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { QrCode, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -192,12 +192,8 @@ export default function App() {
 
       {/* Pied de page Atelier (Masqué au Print) */}
       <footer className="py-6 border-t border-slate-200 bg-white text-center text-xs text-slate-500 print:hidden mt-auto">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center">
           <p>© {new Date().getFullYear()} Pyjama DZ - Atelier Production System. All rights reserved.</p>
-          <p className="flex items-center gap-1">
-            <span>Crafted with excellence for Algerian textile manufacturing</span>
-            <Sparkles className="w-3.5 h-3.5 text-rose-600 inline" />
-          </p>
         </div>
       </footer>
 

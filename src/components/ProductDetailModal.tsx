@@ -67,8 +67,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   useEffect(() => {
     if (product) {
       generateBarcode(barcodeRef.current, product.barcode, 2.2, 70, 16, true);
-      // Pour l'étiquette thermique 50x30mm (1.80x1.10 in) : barres nettes (width 1.5, height 42px) sans texte intégré pour éviter la double écriture
-      generateBarcode(printBarcodeRef.current, product.barcode, 1.5, 42, 11, false);
+      // Pour l'étiquette thermique 50x30mm : barres nettes (width 1.5, height 46px) avec texte intégré propre sans doublon
+      generateBarcode(printBarcodeRef.current, product.barcode, 1.5, 46, 12, true);
     }
 
     setIsConfirmingDelete(false);
@@ -276,24 +276,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             {product.name}
           </h2>
 
-          {/* Code-barres graphique officiel + Numéro en texte clair en dessous */}
-          <div style={{ margin: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-            <svg ref={printBarcodeRef} style={{ maxWidth: '46mm', width: '100%', height: '42px', display: 'block', margin: '0 auto' }}></svg>
-            <p style={{ 
-              fontSize: '11px', 
-              fontWeight: '900', 
-              fontFamily: 'monospace', 
-              margin: '2px 0 0 0', 
-              letterSpacing: '1px', 
-              color: '#000000',
-              lineHeight: '1',
-              whiteSpace: 'nowrap',
-              maxWidth: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}>
-              {product.barcode}
-            </p>
+          {/* Code-barres graphique officiel avec son numéro intégré au centre */}
+          <div style={{ margin: '0', display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <svg ref={printBarcodeRef} style={{ maxWidth: '46mm', width: '100%', height: 'auto', display: 'block', margin: '0 auto' }}></svg>
           </div>
 
         </div>

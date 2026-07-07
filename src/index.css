@@ -91,23 +91,18 @@ body {
  * STYLES D'IMPRESSION (TICKET & ÉTIQUETTE CODE-BARRES)
  * ---------------------------------------------------- */
 @media print {
-  /* 1. Cacher visuellement et réduire à 0 la hauteur de tout le site web pour qu'aucun élément de l'application ne déborde sur une 2ème page ! */
+  /* 1. Cacher visuellement tout le contenu normal de l'application */
   body * {
-    visibility: hidden !important;
-    height: 0 !important;
-    max-height: 0 !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
+    visibility: hidden;
   }
   
-  /* Verrouiller la page à exactement 1 seule étiquette 50x30mm */
-  html, body {
+  /* 2. Verrouiller la page et tous les conteneurs à exactement 28mm de hauteur (strictement inférieur aux 30mm de la page) pour garantir 1 SEULE FEUILLE (1 sheet of paper) dans Chrome ! */
+  html, body, #root, #root > * {
     width: 50mm !important;
-    height: 30mm !important;
+    height: 28mm !important;
     max-width: 50mm !important;
-    max-height: 30mm !important;
+    max-height: 28mm !important;
+    min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
@@ -124,18 +119,17 @@ body {
     break-inside: avoid !important;
   }
 
-  /* 2. Rendre visible et en position FIXED (accrochée à l'écran/page 1) la zone du ticket pour qu'elle soit parfaite et visible à 100% ! */
+  /* 3. Rendre visible et en position FIXED (accrochée à l'écran/page 1) la zone du ticket pour qu'elle soit parfaite et unique sur 1 seule page ! */
   .ticket-print-area {
     visibility: visible !important;
     position: fixed !important;
     left: 0 !important;
     top: 0 !important;
     width: 50mm !important;
-    height: 30mm !important;
+    height: 28mm !important;
     max-width: 50mm !important;
-    max-height: 30mm !important;
-    min-height: 30mm !important;
-    padding: 0 !important;
+    max-height: 28mm !important;
+    padding: 1mm 2mm !important;
     margin: 0 !important;
     background: white !important;
     color: black !important;
@@ -150,12 +144,9 @@ body {
     z-index: 999999 !important;
   }
 
-  /* 3. Redonner à tous les éléments dans la zone du ticket leur visibilité et leurs dimensions normales ! */
+  /* 4. Rendre visible tous les éléments à l'intérieur du ticket (titre, nom, code-barres SVG) sans modifier leurs hauteurs ni détruire les barres SVG ! */
   .ticket-print-area * {
     visibility: visible !important;
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
   }
 
   /* Configuration de la page d'impression pour forcer le format horizontal autocollant 50x30mm sans marges ni espaces blancs */

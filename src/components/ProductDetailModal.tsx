@@ -20,44 +20,54 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Rendu du code-barres graphique avec JsBarcode (Code 128)
-  useEffect(() => {
-    if (product && barcodeRef.current) {
-      try {
-        JsBarcode(barcodeRef.current, product.barcode, {
-          format: 'CODE128',
-          lineColor: '#0f172a',
-          background: '#ffffff',
-          width: 2.2,
-          height: 70,
-          displayValue: true,
-          fontSize: 16,
-          fontOptions: 'bold',
-          font: 'monospace',
-          margin: 10
-        });
-      } catch (e) {
-        console.error("Erreur de génération du code-barres:", e);
+  // Fonction robuste pour générer le code-barres avec fallback et viewBox
+  const generateBarcode = (svgElement: SVGSVGElement | null, barcodeText: string, width: number, height: number, fontSize: number, showText: boolean) => {
+    if (!svgElement || !barcodeText) return;
+    // Nettoyage pour garantir la compatibilité Code 128 (caractères ASCII standard)
+    const cleanText = barcodeText.replace(/[^\x20-\x7E]/g, '').trim() || '000000';
+    
+    try {
+      JsBarcode(svgElement, cleanText, {
+        format: 'CODE128',
+        lineColor: '#000000',
+        background: '#ffffff',
+        width: width,
+        height: height,
+        displayValue: showText,
+        fontSize: fontSize,
+        fontOptions: 'bold',
+        font: 'monospace',
+        margin: 4
+      });
+      // Forcer le viewBox pour empêcher le navigateur de réduire la hauteur (height: 0px) lors de l'impression
+      const w = svgElement.getAttribute('width');
+      const h = svgElement.getAttribute('height');
+      if (w && h) {
+        svgElement.setAttribute('viewBox', `0 0 ${parseInt(w, 10)} ${parseInt(h, 10)}`);
       }
-    }
-
-    if (product && printBarcodeRef.current) {
+    } catch (e) {
+      console.warn("CODE128 failed, fallback to auto format:", e);
       try {
-        JsBarcode(printBarcodeRef.current, product.barcode, {
-          format: 'CODE128',
+        JsBarcode(svgElement, cleanText, {
           lineColor: '#000000',
           background: '#ffffff',
-          width: 2.5,
-          height: 80,
-          displayValue: true,
-          fontSize: 18,
-          fontOptions: 'bold',
-          font: 'monospace',
-          margin: 5
+          width: width,
+          height: height,
+          displayValue: showText,
+          fontSize: fontSize,
+          margin: 4
         });
-      } catch (e) {
-        console.error("Erreur de génération du code-barres impression:", e);
+      } catch (e2) {
+        console.error("Erreur critique génération code-barres:", e2);
       }
+    }
+  };
+
+  // Rendu du code-barres graphique avec JsBarcode (Code 128)
+  useEffect(() => {
+    if (product) {
+      generateBarcode(barcodeRef.current, product.barcode, 2.2, 70, 16, true);
+      generateBarcode(printBarcodeRef.current, product.barcode, 2.5, 75, 18, false);
     }
 
     setIsConfirmingDelete(false);
@@ -233,9 +243,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             {product.name}
           </h2>
 
-          {/* Code-barres graphique officiel */}
-          <div style={{ margin: '0', display: 'flex', justifyContent: 'center' }}>
-            <svg ref={printBarcodeRef} style={{ maxWidth: '100%', height: 'auto' }}></svg>
+          {/* Code-barres graphique officiel + Numéro en texte clair en dessous */}
+          <div style={{ margin: '4px 0 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: '90px' }}>
+            <svg ref={printBarcodeRef} style={{ maxWidth: '260px', width: '100%', height: '75px', display: 'block', margin: '0 auto' }}></svg>
+            <p style={{ fontSize: '16px', fontWeight: '900', fontFamily: 'monospace', margin: '6px 0 0 0', letterSpacing: '3px', color: '#000000' }}>
+              {product.barcode}
+            </p>
           </div>
 
         </div>

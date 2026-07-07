@@ -171,7 +171,7 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
                 required
                 placeholder="ex: PYJ-SATIN_01"
                 value={barcode}
-                onChange={(e) => setBarcode(e.target.value.toUpperCase())}
+                onChange={(e) => setBarcode(e.target.value.toUpperCase().replace(/[^A-Z0-9-_]/g, ''))}
                 className={`w-full pl-11 pr-10 py-3 bg-white border rounded-xl font-mono text-sm tracking-wider uppercase text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all ${
                   barcodeExists
                     ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20 text-rose-700'

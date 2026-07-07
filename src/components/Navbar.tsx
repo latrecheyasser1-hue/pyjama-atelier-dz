@@ -1,18 +1,20 @@
 import React from 'react';
-import { Search, Plus, QrCode } from 'lucide-react';
+import { Search, Plus, QrCode, LogOut } from 'lucide-react';
 
 interface NavbarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onOpenAddModal: () => void;
   totalProducts: number;
+  onLogout?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   searchQuery,
   onSearchChange,
   onOpenAddModal,
-  totalProducts
+  totalProducts,
+  onLogout
 }) => {
   return (
     <header className="glass-nav sticky top-0 z-40 w-full px-4 sm:px-8 py-4 transition-all">
@@ -51,8 +53,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           />
         </div>
 
-        {/* Boutons d'Action (Ajouter Produit) */}
-        <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+        {/* Boutons d'Action (Ajouter Produit + Déconnexion) */}
+        <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto justify-end">
           
           {/* Badge Compteur sur Desktop */}
           <div className="hidden md:flex items-center gap-2 bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-xl text-sm font-bold text-slate-700">
@@ -68,10 +70,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Plus className="w-5 h-5 stroke-[3]" />
             <span>Add New Model</span>
           </button>
+
+          {/* Bouton Déconnexion (Verrouiller) */}
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              title="Se déconnecter / Verrouiller l'Atelier"
+              className="flex items-center justify-center p-2.5 bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 hover:border-rose-300 rounded-xl transition-all shadow-sm"
+            >
+              <LogOut className="w-5 h-5 stroke-[2.2]" />
+            </button>
+          )}
         </div>
 
       </div>
     </header>
   );
 };
+
 

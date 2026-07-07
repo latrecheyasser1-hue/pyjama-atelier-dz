@@ -6,10 +6,15 @@ import { Navbar } from './components/Navbar';
 import { ProductGallery } from './components/ProductGallery';
 import { AddProductModal } from './components/AddProductModal';
 import { ProductDetailModal } from './components/ProductDetailModal';
+import { LoginPage } from './components/LoginPage';
 import confetti from 'canvas-confetti';
 import { QrCode, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('pyjama_auth_session') === 'authenticated_user_123';
+  });
+
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -26,6 +31,12 @@ export default function App() {
     setTimeout(() => {
       setToast(null);
     }, 4000);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('pyjama_auth_session');
+    setIsAuthenticated(false);
+    showToast("🔒 Déconnecté avec succès. Atelier verrouillé.", "success");
   };
 
   // 1. Chargement des produits depuis Supabase
@@ -98,6 +109,30 @@ export default function App() {
     showToast("🗑️ Model deleted successfully.", "success");
   };
 
+  if (!isAuthenticated) {
+    return (
+      <>
+        {toast && (
+          <div className="fixed bottom-6 right-6 z-50 animate-fade-in print:hidden">
+            <div className={`px-5 py-3.5 rounded-2xl shadow-2xl backdrop-blur-xl border flex items-center gap-3 ${
+              toast.type === 'success' 
+                ? 'bg-white/95 border-emerald-500/40 text-emerald-800 shadow-emerald-500/10' 
+                : 'bg-white/95 border-rose-500/40 text-rose-800 shadow-rose-500/10'
+            }`}>
+              {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />}
+              {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />}
+              <span className="text-sm font-semibold">{toast.message}</span>
+            </div>
+          </div>
+        )}
+        <LoginPage onLoginSuccess={() => {
+          setIsAuthenticated(true);
+          showToast("🔓 Bienvenue dans l'Atelier Pyjama DZ !", "success");
+        }} />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-rose-600 selection:text-white">
       
@@ -126,6 +161,7 @@ export default function App() {
           onSearchChange={setSearchQuery}
           onOpenAddModal={() => setIsAddModalOpen(true)}
           totalProducts={products.length}
+          onLogout={handleLogout}
         />
       </div>
 

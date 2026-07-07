@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-main: 'Outfit', 'Tajawal', sans-serif;
+  
+  /* Couleurs de base - Mode Sombre par défaut (Luxury Night Blue & Gold) */
+  --bg-primary: #0f172a;      /* Slate 900 */
+  --bg-secondary: #1e293b;    /* Slate 800 */
+  --bg-tertiary: #334155;     /* Slate 700 */
+  
+  --accent-gold: #f59e0b;     /* Amber 500 */
+  --accent-gold-hover: #d97706;/* Amber 600 */
+  --accent-rose: #f43f5e;     /* Rose 500 */
+  --accent-emerald: #10b981;  /* Emerald 500 */
+  
+  --text-main: #f8fafc;       /* Slate 50 */
+  --text-muted: #94a3b8;      /* Slate 400 */
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Glassmorphism Classes */
+.glass-nav {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.2);
+}
+
+.glass-modal {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Animations de transition */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
+}
+
+/* ----------------------------------------------------
+ * STYLES D'IMPRESSION (TICKET & ÉTIQUETTE CODE-BARRES)
+ * ---------------------------------------------------- */
+@media print {
+  /* Masquer toute l'interface web classique lors de l'impression */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Rendre visible uniquement la zone du ticket à imprimer */
+  .ticket-print-area, .ticket-print-area * {
+    visibility: visible !important;
+  }
+  
+  /* Positionner le ticket proprement en haut à gauche de la page/étiquette */
+  .ticket-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 80mm; /* Largeur standard ticket ou étiquette thermique */
+    padding: 4mm;
+    margin: 0;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: none !important;
+    text-align: center;
+  }
+
+  /* Configuration de la page d'impression pour éviter les en-têtes et pieds de page par défaut */
+  @page {
+    size: auto;
+    margin: 0mm;
+  }
+}

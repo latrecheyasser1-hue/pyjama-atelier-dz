@@ -1,0 +1,259 @@
+import React, { useEffect, useRef, useState } from 'react';
+import type { Product } from '../types/database.types';
+import { X, Printer, Trash2, QrCode, Sparkles, Calendar, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
+import JsBarcode from 'jsbarcode';
+
+interface ProductDetailModalProps {
+  product: Product | null;
+  onClose: () => void;
+  onDelete: (id: string, imageUrl: string | null) => Promise<void>;
+}
+
+export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
+  product,
+  onClose,
+  onDelete
+}) => {
+  const barcodeRef = useRef<SVGSVGElement | null>(null);
+  const printBarcodeRef = useRef<SVGSVGElement | null>(null);
+  
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Rendu du code-barres graphique avec JsBarcode (Code 128)
+  useEffect(() => {
+    if (product && barcodeRef.current) {
+      try {
+        JsBarcode(barcodeRef.current, product.barcode, {
+          format: 'CODE128',
+          lineColor: '#0f172a',
+          background: '#ffffff',
+          width: 2.2,
+          height: 70,
+          displayValue: true,
+          fontSize: 16,
+          fontOptions: 'bold',
+          font: 'monospace',
+          margin: 10
+        });
+      } catch (e) {
+        console.error("Erreur de génération du code-barres:", e);
+      }
+    }
+
+    if (product && printBarcodeRef.current) {
+      try {
+        JsBarcode(printBarcodeRef.current, product.barcode, {
+          format: 'CODE128',
+          lineColor: '#000000',
+          background: '#ffffff',
+          width: 2.5,
+          height: 80,
+          displayValue: true,
+          fontSize: 18,
+          fontOptions: 'bold',
+          font: 'monospace',
+          margin: 5
+        });
+      } catch (e) {
+        console.error("Erreur de génération du code-barres impression:", e);
+      }
+    }
+
+    setIsConfirmingDelete(false);
+  }, [product]);
+
+  if (!product) return null;
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete(product.id, product.image_url);
+      onClose();
+    } catch (e) {
+      console.error("Erreur de suppression:", e);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const formattedDate = new Date(product.created_at).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  return (
+    <>
+      {/* ----------------------------------------------------
+        * 1. MODALE VISUELLE À L'ÉCRAN (Masquée au Print)
+        * ---------------------------------------------------- */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/85 backdrop-blur-lg animate-fade-in print:hidden">
+        
+        <div className="glass-modal w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-white/10 flex flex-col md:flex-row max-h-[90vh]">
+          
+          {/* Colonne Gauche : Grande Photo du Modèle */}
+          <div className="w-full md:w-1/2 bg-slate-900 relative min-h-[260px] md:min-h-full flex items-center justify-center overflow-hidden">
+            {product.image_url ? (
+              <img
+                src={product.image_url}
+                alt={product.name}
+                className="w-full h-full object-cover object-center max-h-[45vh] md:max-h-full"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center p-8 text-center text-slate-500">
+                <Sparkles className="w-16 h-16 mb-2 text-slate-600" />
+                <p className="text-sm">Aucune photo pour ce modèle</p>
+              </div>
+            )}
+            
+            {/* Badge de date en superposition */}
+            <div className="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-xl text-xs text-slate-300 flex items-center gap-1.5 shadow-lg">
+              <Calendar className="w-3.5 h-3.5 text-amber-400" />
+              <span>Ajouté le {formattedDate}</span>
+            </div>
+          </div>
+
+          {/* Colonne Droite : Informations, Code-Barres & Actions */}
+          <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto bg-slate-900/60">
+            
+            <div>
+              {/* En-tête et Bouton Fermer */}
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg mb-2">
+                    <Sparkles className="w-3 h-3" /> Fiche Atelier
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                    {product.name}
+                  </h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="w-10 h-10 shrink-0 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Ligne Code-barres en texte */}
+              <div className="mb-6 bg-slate-800/80 border border-slate-700/80 p-3.5 rounded-2xl flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
+                    <QrCode className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Code-Barres Unique</p>
+                    <p className="font-mono font-bold text-base text-white tracking-wider">{product.barcode}</p>
+                  </div>
+                </div>
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              </div>
+
+              {/* Rendu graphique du Code-Barres */}
+              <div className="bg-white p-4 rounded-2xl flex flex-col items-center justify-center shadow-inner mb-6 border-4 border-slate-800">
+                <svg ref={barcodeRef} className="max-w-full h-auto"></svg>
+                <p className="text-[11px] text-slate-500 font-semibold mt-1">
+                  Prêt pour scan à la douchette sans fil / USB
+                </p>
+              </div>
+            </div>
+
+            {/* Boutons d'Action (Imprimer Ticket & Supprimer) */}
+            <div className="space-y-3 pt-4 border-t border-white/10">
+              
+              {/* Bouton Principal : Imprimer le Ticket */}
+              <button
+                onClick={handlePrint}
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-base transition-all shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Printer className="w-5 h-5 stroke-[2.5]" />
+                <span>🖨️ Imprimer l'Étiquette / Ticket</span>
+              </button>
+
+              {/* Section Suppression */}
+              {!isConfirmingDelete ? (
+                <button
+                  onClick={() => setIsConfirmingDelete(true)}
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-800/80 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-transparent hover:border-rose-500/30 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Supprimer ce modèle</span>
+                </button>
+              ) : (
+                <div className="p-3.5 bg-rose-500/10 border border-rose-500/40 rounded-xl space-y-2.5 animate-fade-in">
+                  <p className="text-xs text-rose-300 font-medium text-center flex items-center justify-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <span>Confirmer la suppression définitive ?</span>
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setIsConfirmingDelete(false)}
+                      disabled={isDeleting}
+                      className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-colors"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                      className="flex-1 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1 shadow-lg shadow-rose-600/30"
+                    >
+                      {isDeleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                      <span>Oui, Supprimer</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* ----------------------------------------------------
+        * 2. ZONE SPÉCIALE D'IMPRESSION (Visible UNIQUEMENT au Print)
+        * ---------------------------------------------------- */}
+      <div className="ticket-print-area hidden print:block">
+        <div style={{ border: '2px solid black', padding: '10px', borderRadius: '8px', textAlign: 'center', background: 'white', color: 'black' }}>
+          
+          {/* En-tête Atelier */}
+          <div style={{ borderBottom: '1px solid #ccc', paddingBottom: '6px', marginBottom: '8px' }}>
+            <h1 style={{ fontSize: '18px', fontWeight: '900', margin: '0', letterSpacing: '-0.5px' }}>PYJAMA DZ</h1>
+            <p style={{ fontSize: '10px', fontWeight: 'bold', margin: '0', textTransform: 'uppercase', color: '#444' }}>
+              L'Atelier de Confection
+            </p>
+          </div>
+
+          {/* Photo du Produit sur le Ticket */}
+          {product.image_url && (
+            <div style={{ margin: '8px auto', width: '100px', height: '100px', overflow: 'hidden', borderRadius: '6px', border: '1px solid #ddd' }}>
+              <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          )}
+
+          {/* Nom du Modèle */}
+          <h2 style={{ fontSize: '15px', fontWeight: '800', margin: '6px 0', lineHeight: '1.2' }}>
+            {product.name}
+          </h2>
+
+          {/* Code-barres graphique officiel */}
+          <div style={{ margin: '10px 0 4px 0', display: 'flex', justifyContent: 'center' }}>
+            <svg ref={printBarcodeRef} style={{ maxWidth: '100%', height: 'auto' }}></svg>
+          </div>
+
+          {/* Date ou mention bas de ticket */}
+          <p style={{ fontSize: '9px', color: '#666', margin: '4px 0 0 0', fontWeight: '500' }}>
+            Qualité Supérieure - Fabriqué en Algérie 🇩Z
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};

@@ -28,8 +28,27 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
     );
   }
 
+  // Filtrage par début de mot (awel klma) ou début de code-barres en temps réel (0ms)
+  const filteredProducts = React.useMemo(() => {
+    if (!searchQuery || !searchQuery.trim()) return products;
+    const q = searchQuery.trim().toLowerCase();
+    return products.filter((p) => {
+      const name = (p.name || '').toLowerCase();
+      const barcode = (p.barcode || '').toLowerCase();
+      return (
+        name.startsWith(q) ||
+        name.includes(' ' + q) ||
+        name.includes('-' + q) ||
+        name.includes('/' + q) ||
+        name.includes('_' + q) ||
+        name.includes('(' + q) ||
+        barcode.startsWith(q)
+      );
+    });
+  }, [products, searchQuery]);
+
   // État vide si aucun produit n'est trouvé
-  if (products.length === 0) {
+  if (filteredProducts.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
         <div className="glass-card rounded-3xl p-12 flex flex-col items-center justify-center border-dashed border-slate-300 bg-white">
@@ -43,22 +62,20 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
           <h3 className="text-2xl font-bold text-slate-900 mb-2">
             {searchQuery
               ? `No models found for "${searchQuery}"`
-              : "The Atelier showcase is empty"}
+              : "No models in your Atelier yet"}
           </h3>
-          <p className="text-slate-500 max-w-md mx-auto mb-8 text-sm leading-relaxed">
+          <p className="text-slate-500 mb-8 max-w-md mx-auto text-sm leading-relaxed">
             {searchQuery
-              ? "Try verifying the scanned barcode or the name entered in the search bar."
-              : "Start by adding your first pyjama or garment model with its photo and barcode!"}
+              ? "We couldn't find any pyjama model or barcode matching your search query. Try another keyword or scan a barcode."
+              : "Your production gallery is currently empty. Start by adding your first pyjama model with its photo and barcode!"}
           </p>
-          {!searchQuery && (
-            <button
-              onClick={onOpenAddModal}
-              className="flex items-center gap-2 bg-gradient-to-r from-rose-700 to-rose-600 hover:from-rose-800 hover:to-rose-700 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-rose-700/20 transform hover:-translate-y-1"
-            >
-              <Plus className="w-5 h-5 stroke-[3]" />
-              <span>Add First Model</span>
-            </button>
-          )}
+          <button
+            onClick={onOpenAddModal}
+            className="flex items-center gap-2 bg-gradient-to-r from-rose-700 to-rose-600 hover:from-rose-800 hover:to-rose-700 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-rose-700/20 transform hover:-translate-y-1"
+          >
+            <Plus className="w-5 h-5 stroke-[3]" />
+            <span>Add First Model</span>
+          </button>
         </div>
       </div>
     );
@@ -81,7 +98,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 
       {/* Grille de Produits (Wajiha visuelle : grandes photos élégantes) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div
             key={product.id}
             onClick={() => onSelectProduct(product)}

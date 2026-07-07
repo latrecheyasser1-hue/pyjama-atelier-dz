@@ -16,9 +16,12 @@ export async function getProducts(searchQuery?: string): Promise<Product[]> {
     .order('created_at', { ascending: false });
 
   if (searchQuery && searchQuery.trim() !== '') {
-    const q = searchQuery.trim();
-    // Recherche par nom ILIKE ou code-barres ILIKE
-    query = query.or(`name.ilike.%${q}%,barcode.ilike.%${q}%`);
+    // Nettoyer les caractères spéciaux SQL/Supabase (, % _) pour éviter les erreurs de syntaxe
+    const q = searchQuery.trim().replace(/[,%_]/g, '');
+    if (q !== '') {
+      // Recherche par début de mot (au début du nom OR après un espace OR après un tiret/slash/parenthèse) ou début de code-barres
+      query = query.or(`name.ilike.${q}%,name.ilike.% ${q}%,name.ilike.%-${q}%,name.ilike.%/${q}%,name.ilike.%(${q}%,barcode.ilike.${q}%`);
+    }
   }
 
   const { data, error } = await query;

@@ -92,12 +92,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       {/* ----------------------------------------------------
         * 1. MODALE VISUELLE À L'ÉCRAN (Masquée au Print)
         * ---------------------------------------------------- */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/85 backdrop-blur-lg animate-fade-in print:hidden">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-lg animate-fade-in print:hidden">
         
-        <div className="glass-modal w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-white/10 flex flex-col md:flex-row max-h-[90vh]">
+        <div className="glass-modal w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-white flex flex-col md:flex-row max-h-[90vh]">
           
           {/* Colonne Gauche : Grande Photo du Modèle */}
-          <div className="w-full md:w-1/2 bg-slate-900 relative min-h-[260px] md:min-h-full flex items-center justify-center overflow-hidden">
+          <div className="w-full md:w-1/2 bg-slate-100 relative min-h-[260px] md:min-h-full flex items-center justify-center overflow-hidden">
             {product.image_url ? (
               <img
                 src={product.image_url}
@@ -105,57 +105,57 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 className="w-full h-full object-cover object-center max-h-[45vh] md:max-h-full"
               />
             ) : (
-              <div className="flex flex-col items-center justify-center p-8 text-center text-slate-500">
-                <Sparkles className="w-16 h-16 mb-2 text-slate-600" />
+              <div className="flex flex-col items-center justify-center p-8 text-center text-slate-400">
+                <Sparkles className="w-16 h-16 mb-2 text-slate-400" />
                 <p className="text-sm">No photo available for this model</p>
               </div>
             )}
             
             {/* Badge de date en superposition */}
-            <div className="absolute bottom-4 left-4 bg-slate-950/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-xl text-xs text-slate-300 flex items-center gap-1.5 shadow-lg">
-              <Calendar className="w-3.5 h-3.5 text-amber-400" />
+            <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md border border-slate-200 px-3 py-1.5 rounded-xl text-xs text-slate-700 flex items-center gap-1.5 shadow-md">
+              <Calendar className="w-3.5 h-3.5 text-rose-600" />
               <span>Added on {formattedDate}</span>
             </div>
           </div>
 
           {/* Colonne Droite : Informations, Code-Barres & Actions */}
-          <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto bg-slate-900/60">
+          <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto bg-slate-50/60">
             
             <div>
               {/* En-tête et Bouton Fermer */}
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg mb-2">
+                  <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-lg mb-2">
                     <Sparkles className="w-3 h-3" /> Atelier Specification
                   </span>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
                     {product.name}
                   </h2>
                 </div>
                 <button
                   onClick={onClose}
-                  className="w-10 h-10 shrink-0 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+                  className="w-10 h-10 shrink-0 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-500 hover:text-slate-900 flex items-center justify-center transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Ligne Code-barres en texte */}
-              <div className="mb-6 bg-slate-800/80 border border-slate-700/80 p-3.5 rounded-2xl flex items-center justify-between">
+              <div className="mb-6 bg-white border border-slate-200 p-3.5 rounded-2xl flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
+                  <div className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-700">
                     <QrCode className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Unique Barcode</p>
-                    <p className="font-mono font-bold text-base text-white tracking-wider">{product.barcode}</p>
+                    <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Unique Barcode</p>
+                    <p className="font-mono font-bold text-base text-slate-900 tracking-wider">{product.barcode}</p>
                   </div>
                 </div>
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               </div>
 
               {/* Rendu graphique du Code-Barres */}
-              <div className="bg-white p-4 rounded-2xl flex flex-col items-center justify-center shadow-inner mb-6 border-4 border-slate-800">
+              <div className="bg-white p-4 rounded-2xl flex flex-col items-center justify-center shadow-sm mb-6 border-2 border-slate-200">
                 <svg ref={barcodeRef} className="max-w-full h-auto"></svg>
                 <p className="text-[11px] text-slate-500 font-semibold mt-1">
                   Ready for wireless / USB barcode scanner
@@ -164,12 +164,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             </div>
 
             {/* Boutons d'Action (Imprimer Ticket & Supprimer) */}
-            <div className="space-y-3 pt-4 border-t border-white/10">
+            <div className="space-y-3 pt-4 border-t border-slate-200">
               
               {/* Bouton Principal : Imprimer le Ticket */}
               <button
                 onClick={handlePrint}
-                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-base transition-all shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 active:translate-y-0"
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-rose-700 to-rose-600 hover:from-rose-800 hover:to-rose-700 text-white font-extrabold text-base transition-all shadow-lg shadow-rose-700/25 hover:shadow-rose-700/40 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 active:translate-y-0"
               >
                 <Printer className="w-5 h-5 stroke-[2.5]" />
                 <span>🖨️ Print Label / Ticket</span>
@@ -179,22 +179,22 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               {!isConfirmingDelete ? (
                 <button
                   onClick={() => setIsConfirmingDelete(true)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-slate-800/80 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-transparent hover:border-rose-500/30 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-200/80 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-transparent hover:border-rose-200 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>Delete this model</span>
                 </button>
               ) : (
-                <div className="p-3.5 bg-rose-500/10 border border-rose-500/40 rounded-xl space-y-2.5 animate-fade-in">
-                  <p className="text-xs text-rose-300 font-medium text-center flex items-center justify-center gap-1.5">
-                    <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl space-y-2.5 animate-fade-in">
+                  <p className="text-xs text-rose-700 font-medium text-center flex items-center justify-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
                     <span>Confirm permanent deletion?</span>
                   </p>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsConfirmingDelete(false)}
                       disabled={isDeleting}
-                      className="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-colors"
+                      className="flex-1 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition-colors"
                     >
                       Cancel
                     </button>

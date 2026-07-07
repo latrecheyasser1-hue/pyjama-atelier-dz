@@ -99,21 +99,21 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-rose-600 selection:text-white">
       
       {/* Toast Flottant de Notification (Masqué au Print) */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-fade-in print:hidden">
           <div className={`px-5 py-3.5 rounded-2xl shadow-2xl backdrop-blur-xl border flex items-center gap-3 ${
             toast.type === 'success' 
-              ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300' 
+              ? 'bg-white/95 border-emerald-500/40 text-emerald-800 shadow-emerald-500/10' 
               : toast.type === 'scan'
-              ? 'bg-amber-950/90 border-amber-500/40 text-amber-300'
-              : 'bg-rose-950/90 border-rose-500/40 text-rose-300'
+              ? 'bg-white/95 border-rose-500/40 text-rose-800 shadow-rose-500/10'
+              : 'bg-white/95 border-rose-500/40 text-rose-800 shadow-rose-500/10'
           }`}>
-            {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
-            {toast.type === 'scan' && <QrCode className="w-5 h-5 text-amber-400 shrink-0 animate-bounce" />}
-            {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />}
+            {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />}
+            {toast.type === 'scan' && <QrCode className="w-5 h-5 text-rose-600 shrink-0 animate-bounce" />}
+            {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />}
             <span className="text-sm font-semibold">{toast.message}</span>
           </div>
         </div>
@@ -155,12 +155,12 @@ export default function App() {
       />
 
       {/* Pied de page Atelier (Masqué au Print) */}
-      <footer className="py-6 border-t border-slate-900 text-center text-xs text-slate-500 print:hidden mt-auto">
+      <footer className="py-6 border-t border-slate-200 bg-white text-center text-xs text-slate-500 print:hidden mt-auto">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>© {new Date().getFullYear()} Pyjama DZ - Atelier Production System. All rights reserved.</p>
           <p className="flex items-center gap-1">
             <span>Crafted with excellence for Algerian textile manufacturing</span>
-            <Sparkles className="w-3.5 h-3.5 text-amber-500 inline" />
+            <Sparkles className="w-3.5 h-3.5 text-rose-600 inline" />
           </p>
         </div>
       </footer>

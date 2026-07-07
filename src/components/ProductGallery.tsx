@@ -33,9 +33,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
         <div className="glass-card rounded-3xl p-12 flex flex-col items-center justify-center border-dashed border-slate-300 bg-white">
-          <div className="w-24 h-24 rounded-full bg-rose-50 flex items-center justify-center mb-6 shadow-inner border border-rose-200">
-            {searchQuery ? <Search className="w-10 h-10 text-rose-600" /> : <img src="/logo.png" alt="Logo" className="w-16 h-16 object-contain rounded-full" />}
-          </div>
+          {searchQuery ? (
+            <div className="w-20 h-20 rounded-full bg-rose-50 flex items-center justify-center mb-6 shadow-inner border border-rose-200">
+              <Search className="w-10 h-10 text-rose-600" />
+            </div>
+          ) : (
+            <img src="/logo.svg" alt="Pyjama DZ Logo" className="w-32 h-32 object-contain drop-shadow-xl mb-6 transform hover:scale-105 transition-transform" />
+          )}
           <h3 className="text-2xl font-bold text-slate-900 mb-2">
             {searchQuery
               ? `No models found for "${searchQuery}"`

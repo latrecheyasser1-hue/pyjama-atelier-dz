@@ -10,25 +10,25 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico'],
+      includeAssets: ['favicon.svg', 'logo.svg'],
       manifest: {
         name: "Pyjama DZ - L'Atelier",
         short_name: "Pyjama DZ",
         description: "Application de gestion visuelle des produits et étiquettes code-barres pour l'Atelier",
-        theme_color: "#0f172a",
-        background_color: "#0f172a",
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
         display: "standalone",
         start_url: "/",
         icons: [
           {
-            src: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=192&q=80",
+            src: "/logo.svg",
             sizes: "192x192",
-            type: "image/png"
+            type: "image/svg+xml"
           },
           {
-            src: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=512&q=80",
+            src: "/logo.svg",
             sizes: "512x512",
-            type: "image/png",
+            type: "image/svg+xml",
             purpose: "any maskable"
           }
         ]

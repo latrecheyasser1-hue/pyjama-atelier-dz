@@ -46,9 +46,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
           <div className="flex items-center gap-3">
             <img 
-              src="/logo.png" 
+              src="/logo.svg" 
               alt="Pyjama DZ Logo" 
-              className="w-12 h-12 rounded-full object-contain shadow-md border-2 border-rose-600/20 bg-white p-0.5 transform hover:scale-105 transition-transform" 
+              className="w-14 h-14 object-contain drop-shadow-md transform hover:scale-105 transition-transform" 
             />
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-rose-700 via-rose-600 to-amber-600 bg-clip-text text-transparent">

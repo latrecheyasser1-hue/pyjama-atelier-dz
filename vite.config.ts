@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'logo.svg', 'favicon.png', 'logo.png', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-64x64.png', 'pwa-maskable-512x512.png'],
+      includeAssets: ['manifest.json', 'favicon.ico', 'favicon.svg', 'logo.svg', 'favicon.png', 'logo.png', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-64x64.png', 'pwa-maskable-512x512.png'],
       devOptions: {
         enabled: true,
         type: 'module',

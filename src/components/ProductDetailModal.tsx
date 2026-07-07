@@ -221,37 +221,23 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         * 2. ZONE SPÉCIALE D'IMPRESSION (Visible UNIQUEMENT au Print)
         * ---------------------------------------------------- */}
       <div className="ticket-print-area hidden print:block">
-        <div style={{ border: '2px solid black', padding: '10px', borderRadius: '8px', textAlign: 'center', background: 'white', color: 'black' }}>
+        <div style={{ border: 'none', padding: '8px 4px', textAlign: 'center', background: 'white', color: 'black' }}>
           
           {/* En-tête Atelier */}
-          <div style={{ borderBottom: '1px solid #ccc', paddingBottom: '6px', marginBottom: '8px' }}>
-            <h1 style={{ fontSize: '18px', fontWeight: '900', margin: '0', letterSpacing: '-0.5px' }}>PYJAMA DZ</h1>
-            <p style={{ fontSize: '10px', fontWeight: 'bold', margin: '0', textTransform: 'uppercase', color: '#444' }}>
-              Atelier Production System
-            </p>
-          </div>
-
-          {/* Photo du Produit sur le Ticket */}
-          {product.image_url && (
-            <div style={{ margin: '8px auto', width: '100px', height: '100px', overflow: 'hidden', borderRadius: '6px', border: '1px solid #ddd' }}>
-              <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-          )}
+          <h1 style={{ fontSize: '22px', fontWeight: '900', margin: '0 0 8px 0', letterSpacing: '1px', textTransform: 'uppercase' }}>
+            PYJAMA DZ
+          </h1>
 
           {/* Nom du Modèle */}
-          <h2 style={{ fontSize: '15px', fontWeight: '800', margin: '6px 0', lineHeight: '1.2' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', margin: '0 0 10px 0', lineHeight: '1.2' }}>
             {product.name}
           </h2>
 
           {/* Code-barres graphique officiel */}
-          <div style={{ margin: '10px 0 4px 0', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ margin: '0', display: 'flex', justifyContent: 'center' }}>
             <svg ref={printBarcodeRef} style={{ maxWidth: '100%', height: 'auto' }}></svg>
           </div>
 
-          {/* Date ou mention bas de ticket */}
-          <p style={{ fontSize: '9px', color: '#666', margin: '4px 0 0 0', fontWeight: '500' }}>
-            Premium Quality - Made in Algeria 🇩Z
-          </p>
         </div>
       </div>
     </>

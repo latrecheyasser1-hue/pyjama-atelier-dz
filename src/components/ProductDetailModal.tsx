@@ -234,9 +234,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
       <div className="ticket-print-area hidden print:flex">
         <div style={{ 
           width: '50mm', 
-          height: '30mm', 
+          height: '29mm', 
           maxWidth: '50mm',
-          maxHeight: '30mm',
+          maxHeight: '29mm',
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center', 

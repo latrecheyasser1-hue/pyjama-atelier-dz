@@ -233,13 +233,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         * ---------------------------------------------------- */}
       <div className="ticket-print-area hidden print:flex">
         <div style={{ 
-          width: '100%', 
-          height: '100%', 
+          width: '50mm', 
+          height: '30mm', 
+          maxWidth: '50mm',
+          maxHeight: '30mm',
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center', 
           justifyContent: 'center', 
           padding: '1mm 2mm', 
+          margin: '0 auto',
           textAlign: 'center', 
           background: 'white', 
           color: 'black',

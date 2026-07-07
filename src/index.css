@@ -96,25 +96,29 @@ body {
     visibility: hidden;
   }
   
-  /* Verrouiller la page à exactement 1 seule étiquette (empêcher 3 sheets of paper !) */
+  /* Verrouiller la page à exactement 1 seule étiquette 50x30mm sans marges ni espaces blancs */
   html, body {
-    width: 100%;
-    height: 100%;
+    width: 50mm !important;
+    height: 30mm !important;
+    max-width: 50mm !important;
+    max-height: 30mm !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
     background: white !important;
   }
 
-  /* Rendre visible UNIQUEMENT la zone du ticket et la positionner en fixe pour couvrir l'étiquette unique */
+  /* Rendre visible UNIQUEMENT la zone du ticket et la positionner en fixe sur 50x30mm */
   .ticket-print-area {
     visibility: visible !important;
     position: fixed !important;
     left: 0 !important;
     top: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    padding: 1mm !important;
+    width: 50mm !important;
+    height: 30mm !important;
+    max-width: 50mm !important;
+    max-height: 30mm !important;
+    padding: 1mm 2mm !important;
     margin: 0 !important;
     background: white !important;
     color: black !important;
@@ -133,9 +137,10 @@ body {
     visibility: visible !important;
   }
 
-  /* Configuration de la page d'impression pour s'adapter au format autocollant sélectionné (ex: 30*50) */
+  /* Configuration de la page d'impression pour forcer le format horizontal autocollant 50x30mm sans marges ni espaces blancs */
   @page {
-    size: auto;
+    size: 50mm 30mm;
     margin: 0mm;
   }
 }
+

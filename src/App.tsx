@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Product } from './types/database.types';
 import { getProducts, addProduct, deleteProduct, getProductByBarcode } from './services/supabase';
+import { fetchProductNameFromGlobalDB } from './services/barcodeApi';
 import { useBarcodeScanner } from './hooks/useBarcodeScanner';
 import { Navbar } from './components/Navbar';
 import { ProductGallery } from './components/ProductGallery';
@@ -21,6 +22,8 @@ export default function App() {
   
   // Modales
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [scannedUnknownBarcode, setScannedUnknownBarcode] = useState<string>('');
+  const [scannedUnknownName, setScannedUnknownName] = useState<string>('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   // Toast de notification
@@ -95,8 +98,21 @@ export default function App() {
       });
       showToast(`📦 Model detected: "${foundProduct.name}"`, "scan");
     } else {
-      // ⚠️ PRODUIT INCONNU -> On propose d'ajouter
-      showToast(`⚠️ Barcode "${code}" not found in database. Click "Add New Model" to register it.`, "error");
+      // ⚠️ PRODUIT INCONNU -> On cherche sur internet, on propose d'ajouter
+      showToast(`⚠️ Barcode "${code}" not found. Searching global database...`, "scan");
+      
+      // Essayer de récupérer le nom sur internet
+      const fetchedName = await fetchProductNameFromGlobalDB(code);
+      
+      setScannedUnknownBarcode(code);
+      if (fetchedName) {
+        setScannedUnknownName(fetchedName);
+        showToast(`✨ Product found online! Please review and save.`, "success");
+      } else {
+        setScannedUnknownName('');
+        showToast(`Barcode "${code}" is new. Please add the model details.`, "error");
+      }
+      setIsAddModalOpen(true);
     }
   }, [products]);
 
@@ -196,8 +212,14 @@ export default function App() {
       {/* Modale d'Ajout d'un Produit (Masquée au Print) */}
       <AddProductModal
         isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setScannedUnknownBarcode('');
+          setScannedUnknownName('');
+        }}
         onAdd={handleAddProduct}
+        initialBarcode={scannedUnknownBarcode}
+        initialName={scannedUnknownName}
       />
 
       {/* Modale de Détail & Impression du Ticket Code-Barres */}

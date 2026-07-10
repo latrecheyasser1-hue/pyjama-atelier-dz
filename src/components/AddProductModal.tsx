@@ -6,12 +6,16 @@ interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAdd: (name: string, barcode: string, imageFile: File | null) => Promise<void>;
+  initialBarcode?: string;
+  initialName?: string;
 }
 
 export const AddProductModal: React.FC<AddProductModalProps> = ({
   isOpen,
   onClose,
-  onAdd
+  onAdd,
+  initialBarcode = '',
+  initialName = ''
 }) => {
   const [name, setName] = useState('');
   const [barcode, setBarcode] = useState('');
@@ -27,18 +31,18 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Réinitialiser le formulaire à l'ouverture/fermeture
+  // Réinitialiser le formulaire à l'ouverture/fermeture ou définir les valeurs initiales
   useEffect(() => {
     if (isOpen) {
-      setName('');
-      setBarcode('');
+      setName(initialName);
+      setBarcode(initialBarcode);
       setImageFile(null);
       setImagePreview(null);
       setBarcodeExists(false);
       setExistingProductName('');
       setErrorMsg(null);
     }
-  }, [isOpen]);
+  }, [isOpen, initialBarcode, initialName]);
 
   // Vérification en temps réel du code-barres (anti-doublon)
   useEffect(() => {
